@@ -1,0 +1,56 @@
+<html>
+<body>
+    <div class="memo-form">
+      <h3>メモ内容</h3>
+      <form action="{% url 'post' %}" method="post">
+        {% csrf_token %}
+        <div class="text-memo">
+          {{ form.content }}
+        </div>
+        <div class="post-form">
+            <input type="submit" value="登録" class="post-botton">
+        </div>
+      </form>
+    </div>
+    <form action="{% url 'set_record_number' %}" method="post">
+        {% csrf_token %}
+        <div class="slct01">
+            {{ record_number_form.record_number }}
+        </div>
+    </form>
+    <form action="{% url 'set_order_option' %}" method="post">
+        {% csrf_token %}
+        <div class="slct01">
+            {{ record_order_form.record_order }}
+        </div>
+    </form>
+  <div class="top_box">
+    {% for memo in page %}
+    <div>
+      <p>{{ memo.content }}</p>
+      <p>{{ memo.update_datetime|date:"Y/m/d H:m:s" }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <div class="pagination">
+    {% if page.has_previous %}
+        <a href="{% url 'index' %}{{ page.previous_page_number }}">前へ</a>
+    {% endif %}
+    {% for num in page.paginator.page_range %}
+        {% if page.number == num %}
+            <span class="current">{{ page.number }}</span>
+        {% else %}
+            <a href="{% url 'index' %}{{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    {% if page.has_next %}
+        <a href="{% url 'index' %}{{ page.next_page_number }}">次へ</a>
+    {% endif %}
+  </div>
+  <div>
+	  <a href="http://127.0.0.1:8000/accounts/logout">ログアウト</a>
+  </div>
+
+</body>
+</html>
